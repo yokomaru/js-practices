@@ -6,25 +6,22 @@ const insert = "INSERT INTO books (title) values ($1)";
 const select = "SELECT id, title FROM books";
 const drop = "DROP TABLE books";
 
-function dbRun(sql, param) {
+function dbRun(db, sql, param) {
   return new Promise((resolve, reject) => {
     db.run(sql, param, function (err) {
       if (err) {
-        console.log("callback has error ...");
         reject(err);
       } else {
-        //console.log(`this.lastID: ${this.lastID}`);
         resolve(this);
       }
     });
   });
 }
 
-function dbGet(sql) {
+function dbGet(db, sql) {
   return new Promise((resolve, reject) => {
     db.get(sql, (error, row) => {
       if (error) {
-        console.log("callback has error ...");
         reject(error);
       } else {
         resolve(row);
@@ -33,29 +30,33 @@ function dbGet(sql) {
   });
 }
 
-function dbClose() {
+function dbClose(db) {
   return new Promise(() => {
-    db.close();;
+    db.close();
   });
 }
 
-const db = new sqlite3.Database(":memory:");
+function dbOperation() {
+  const db = new sqlite3.Database(":memory:");
 
-dbRun(create)
-  .then(() => {
+  dbRun(db, create).then(() => {
     const param = { $1: "Title1" };
-    dbRun(insert, param).then((result) => {
-      console.log(`this.lastID: ${result.lastID}`);
-    });
-  })
-  .then(() => {
-    dbGet(select)
-      .then((db) => {
-        console.log(db);
+    dbRun(db, insert, param)
+      .then((result) => {
+        console.log(`this.lastID: ${result.lastID}`);
       })
       .then(() => {
-        dbRun(drop).then(() => {
-          dbClose();
-        });
+        dbGet(db, select)
+          .then((row) => {
+            console.log(row.id + ": " + row.title);
+          })
+          .then(() => {
+            dbRun(db, drop).then(() => {
+              dbClose(db);
+            });
+          });
       });
   });
+}
+
+dbOperation();
