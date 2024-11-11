@@ -1,17 +1,19 @@
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
-const create = "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)";
-const insert = "INSERT INTO books (id, title) values ($1, $2)";
-const select = "SELECT id, title FROM books";
-const selectError = "SELECT id, titl FROM books";
-const drop = "DROP TABLE books";
+const createQuery =
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
+const insertQuery = "INSERT INTO books (title) values ($1)";
+const selectQuery = "SELECT id, title FROM books";
+const errorSelectQuery = "SELECT id, titl FROM books";
+const dropQuery = "DROP TABLE books";
+const insertParam = { $1: "Title1" };
 
-function dbRun(db, sql, param) {
+function runDB(db, query, param) {
   return new Promise((resolve, reject) => {
-    db.run(sql, param, function (err) {
-      if (err) {
-        reject(err);
+    db.run(query, param, function (error) {
+      if (error) {
+        reject(error);
       } else {
         resolve(this);
       }
@@ -19,9 +21,9 @@ function dbRun(db, sql, param) {
   });
 }
 
-function dbGet(db, sql) {
+function getDB(db, query) {
   return new Promise((resolve, reject) => {
-    db.get(sql, (error, row) => {
+    db.get(query, (error, row) => {
       if (error) {
         reject(error);
       } else {
@@ -31,70 +33,68 @@ function dbGet(db, sql) {
   });
 }
 
-function dbClose(db) {
+function closeDB(db) {
   return new Promise(() => {
     db.close();
   });
 }
 
-function dbOperation() {
+function executeSuccessDBOperations() {
   const db = new sqlite3.Database(":memory:");
 
-  dbRun(db, create).then(() => {
-    const param = { $2: "Title1" };
-    dbRun(db, insert, param)
+  runDB(db, createQuery).then(() => {
+    runDB(db, insertQuery, insertParam)
       .then((result) => {
         console.log(`this.lastID: ${result.lastID}`);
       })
       .then(() => {
-        dbGet(db, select)
-          .then((row) => {
-            console.log(row.id + ": " + row.title);
+        getDB(db, selectQuery)
+          .then((result) => {
+            console.log(`${result.id}: ${result.title}`);
           })
           .then(() => {
-            dbRun(db, drop).then(() => {
-              dbClose(db);
+            runDB(db, dropQuery).then(() => {
+              closeDB(db);
             });
           });
       });
   });
 }
 
-function dbErrorOperation() {
+function executeErrorDBOperations() {
   const db = new sqlite3.Database(":memory:");
 
-  dbRun(db, create).then(() => {
-    const param1 = { $1: 1, $2: "Title1" };
-    const param2 = { $1: 1, $2: "Title1" };
-    dbRun(db, insert, param1)
+  runDB(db, createQuery).then(() => {
+    runDB(db, insertQuery, insertParam)
       .then(
-        dbRun(db, insert, param2)
+        runDB(db, insertQuery, insertParam)
           .then((result) => {
             console.log(`this.lastID: ${result.lastID}`);
           })
-          .catch((result) => {
-            // rejectの結果が引数に入る
-            console.log(result);
+          .catch((error) => {
+            console.log(error);
           }),
       )
       .then(() => {
-        dbGet(db, selectError)
-          .then((row) => {
-            console.log(row.id + ": " + row.title);
+        getDB(db, errorSelectQuery)
+          .then((result) => {
+            console.log(`${result.id}: ${result.title}`);
           })
-          .catch((result) => {
-            // rejectの結果が引数に入る
-            console.log(result);
+          .catch((error) => {
+            console.log(error);
           })
           .then(() => {
-            dbRun(db, drop).then(() => {
-              dbClose(db);
+            runDB(db, dropQuery).then(() => {
+              closeDB(db);
             });
           });
       });
   });
 }
 
-dbOperation();
+console.log("Success");
+executeSuccessDBOperations();
 await timers.setTimeout(100);
-dbErrorOperation();
+console.log("-------------------------------------");
+console.log("Error");
+executeErrorDBOperations();
