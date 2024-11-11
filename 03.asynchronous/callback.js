@@ -1,49 +1,59 @@
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
-const db = new sqlite3.Database(":memory:");
+const createQuery =
+  "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT UNIQUE)";
+const insertQuery = "INSERT INTO books (title) values ($1)";
+const selectQuery = "SELECT id, title FROM books";
+const errorSelectQuery = "SELECT id, titl FROM books";
+const dropQuery = "DROP TABLE books";
+const insertParam = { $1: "Title1" };
 
-db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
-  {
-    db.run(
-      "INSERT INTO books (title) values ($1)",
-      {
-        $1: "Title1",
-      },
-      function () {
+const executeSuccessDBOperations = () => {
+  const db = new sqlite3.Database(":memory:");
+  db.run(createQuery, () => {
+    {
+      db.run(insertQuery, insertParam, function () {
         console.log(`this.lastID: ${this.lastID}`);
-        db.get("SELECT id, title FROM books", (error, row) => {
-          console.log(row.id + ": " + row.title);
-          db.run("DROP TABLE books");
+        db.get(selectQuery, (error, result) => {
+          console.log(`${result.id}: ${result.title}`);
+          db.run(dropQuery, () => {
+            db.close();
+          });
         });
-      },
-    );
-  }
-});
+      });
+    }
+  });
+};
 
-await timers.setTimeout(100);
-
-db.run("CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)", () => {
-  {
-    db.run("INSERT INTO books (id, title) VALUES ('1', 'Title1');", () => {
-      db.run(
-        "INSERT INTO books (id, title) VALUES ('1', 'Title2');",
-        (error) => {
+const executeErrorDBOperations = () => {
+  const db = new sqlite3.Database(":memory:");
+  db.run(createQuery, () => {
+    {
+      db.run(insertQuery, insertParam, () => {
+        db.run(insertQuery, insertParam, (error) => {
           console.error(error);
-          db.each(
-            "SELECT id, titl FROM books ",
-            (error, row) => {
-              console.log(row.id + ": " + row.title);
+          db.all(
+            errorSelectQuery,
+            (result) => {
+              console.log(`${result.id}: ${result.title}`);
             },
             (error) => {
               console.error(error);
-              db.run("DROP TABLE books", () => {
+              db.run(dropQuery, () => {
                 db.close();
               });
             },
           );
-        },
-      );
-    });
-  }
-});
+        });
+      });
+    }
+  });
+};
+
+console.log("Success");
+executeSuccessDBOperations();
+await timers.setTimeout(100);
+console.log("-------------------------------------");
+console.log("Error");
+executeErrorDBOperations();
