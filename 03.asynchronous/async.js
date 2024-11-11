@@ -61,20 +61,16 @@ async function dbErrorOperation() {
   try {
     await dbRun(db, insert, param2);
   } catch (err) {
-    console.log(err);
-    console.log(err.stack)
-    console.log(err.message);
-    console.log(err.code);
-    // console.log(err);
+    if (err.code == 'SQLITE_CONSTRAINT'){
+      console.log(err);
+    }
   }
   try {
     await dbGet(db, selectError);
   } catch (err) {
-    console.log(err);
-    console.log(err.stack)
-    console.log(err.message);
-    console.log(err.code);
-    // console.log(err);
+    if (err.code == 'SQLITE_ERROR'){
+      console.log(err);
+    }
   }
   await dbRun(db, drop);
   await dbClose(db);
