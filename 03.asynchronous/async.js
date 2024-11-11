@@ -1,27 +1,29 @@
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
-const create = "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)";
-const insert = "INSERT INTO books (id, title) values ($1, $2)";
-const select = "SELECT id, title FROM books";
-const selectError = "SELECT id, titl FROM books";
-const drop = "DROP TABLE books";
+const createQuery =
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
+const insertQuery = "INSERT INTO books (title) values ($1)";
+const selectQuery = "SELECT id, title FROM books";
+const errorSelectQuery = "SELECT id, titl FROM books";
+const dropQuery = "DROP TABLE books";
+const insertParam = { $1: "Title1" };
 
-function dbRun(db, sql, param) {
+const runDB = (db, query, param) => {
   return new Promise((resolve, reject) => {
-    db.run(sql, param, function (err) {
-      if (err) {
-        reject(err);
+    db.run(query, param, function (error) {
+      if (error) {
+        reject(error);
       } else {
         resolve(this);
       }
     });
   });
-}
+};
 
-function dbGet(db, sql) {
+const getDB = (db, query) => {
   return new Promise((resolve, reject) => {
-    db.get(sql, (error, row) => {
+    db.get(query, (error, row) => {
       if (error) {
         reject(error);
       } else {
@@ -29,56 +31,52 @@ function dbGet(db, sql) {
       }
     });
   });
-}
+};
 
-function dbClose(db) {
-  return new Promise((resolve) => {
+const closeDB = (db) => {
+  return new Promise(() => {
     db.close();
-    resolve("削除");
   });
-}
+};
 
-async function dbOperation() {
+const executeSuccessDBOperations = async () => {
   const db = new sqlite3.Database(":memory:");
-  const param = { $2: "Title1" };
 
-  await dbRun(db, create);
-  const dbInsert = await dbRun(db, insert, param);
-  console.log(`this.lastID: ${dbInsert.lastID}`);
-  const dbSelect = await dbGet(db, select);
-  console.log(dbSelect.id + ": " + dbSelect.title);
-  await dbRun(db, drop);
-  await dbClose(db);
-}
+  await runDB(db, createQuery);
+  const insertedStatement = await runDB(db, insertQuery, insertParam);
+  console.log(`this.lastID: ${insertedStatement.lastID}`);
+  const selectedStatement = await getDB(db, selectQuery);
+  console.log(`${selectedStatement.id}: ${selectedStatement.title}`);
+  await runDB(db, dropQuery);
+  await closeDB(db);
+};
 
-async function dbErrorOperation() {
+const executeErrorDBOperations = async () => {
   const db = new sqlite3.Database(":memory:");
-  const param1 = { $1: 1, $2: "Title1" };
-  const param2 = { $1: 1, $2: "Title1" };
 
-  await dbRun(db, create);
-  await dbRun(db, insert, param1);
+  await runDB(db, createQuery);
+  await runDB(db, insertQuery, insertParam);
   try {
-    await dbRun(db, insert, param2);
-  } catch (err) {
-    if (err.code == 'SQLITE_CONSTRAINT'){
-      console.log(err);
+    await runDB(db, insertQuery, insertParam);
+  } catch (error) {
+    if (error.code == "SQLITE_CONSTRAINT") {
+      console.log(error);
     }
   }
   try {
-    await dbGet(db, selectError);
-  } catch (err) {
-    if (err.code == 'SQLITE_ERROR'){
-      console.log(err);
+    await getDB(db, errorSelectQuery);
+  } catch (error) {
+    if (error.code == "SQLITE_ERROR") {
+      console.log(error);
     }
   }
-  await dbRun(db, drop);
-  await dbClose(db);
-}
+  await runDB(db, dropQuery);
+  await closeDB(db);
+};
 
-console.log("No Error")
-dbOperation();
+console.log("Success");
+executeSuccessDBOperations();
 await timers.setTimeout(100);
-console.log("-------------------------------------")
-console.log("Error")
-dbErrorOperation();
+console.log("-------------------------------------");
+console.log("Error");
+executeErrorDBOperations();
