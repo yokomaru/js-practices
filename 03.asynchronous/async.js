@@ -1,10 +1,10 @@
-//import timers from "timers/promises";
+import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
 const create = "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT)";
 const insert = "INSERT INTO books (id, title) values ($1, $2)";
 const select = "SELECT id, title FROM books";
-//const selectError = "SELECT id, titl FROM books";
+const selectError = "SELECT id, titl FROM books";
 const drop = "DROP TABLE books";
 
 function dbRun(db, sql, param) {
@@ -45,47 +45,44 @@ async function dbOperation() {
   await dbRun(db, create);
   const dbInsert = await dbRun(db, insert, param);
   console.log(`this.lastID: ${dbInsert.lastID}`);
-  const dbSelect= await dbGet(db, select);
+  const dbSelect = await dbGet(db, select);
   console.log(dbSelect.id + ": " + dbSelect.title);
   await dbRun(db, drop);
   await dbClose(db);
 }
 
-// function dbErrorOperation() {
-//   const db = new sqlite3.Database(":memory:");
-//   const param1 = { $1: 1, $2: "Title1" };
-//   const param2 = { $1: 1, $2: "Title1" };
+async function dbErrorOperation() {
+  const db = new sqlite3.Database(":memory:");
+  const param1 = { $1: 1, $2: "Title1" };
+  const param2 = { $1: 1, $2: "Title1" };
 
-//   dbRun(db, create).then(() => {
-//     dbRun(db, insert, param1)
-//       .then(
-//         dbRun(db, insert, param2)
-//           .then((result) => {
-//             console.log(`this.lastID: ${result.lastID}`);
-//           })
-//           .catch((result) => {
-//             // rejectの結果が引数に入る
-//             console.log(result);
-//           }),
-//       )
-//       .then(() => {
-//         dbGet(db, selectError)
-//           .then((row) => {
-//             console.log(row.id + ": " + row.title);
-//           })
-//           .catch((result) => {
-//             // rejectの結果が引数に入る
-//             console.log(result);
-//           })
-//           .then(() => {
-//             dbRun(db, drop).then(() => {
-//               dbClose(db);
-//             });
-//           });
-//       });
-//   });
-// }
+  await dbRun(db, create);
+  await dbRun(db, insert, param1);
+  try {
+    await dbRun(db, insert, param2);
+  } catch (err) {
+    console.log(err);
+    console.log(err.stack)
+    console.log(err.message);
+    console.log(err.code);
+    // console.log(err);
+  }
+  try {
+    await dbGet(db, selectError);
+  } catch (err) {
+    console.log(err);
+    console.log(err.stack)
+    console.log(err.message);
+    console.log(err.code);
+    // console.log(err);
+  }
+  await dbRun(db, drop);
+  await dbClose(db);
+}
 
+console.log("No Error")
 dbOperation();
-// await timers.setTimeout(100);
-// dbErrorOperation();
+await timers.setTimeout(100);
+console.log("-------------------------------------")
+console.log("Error")
+dbErrorOperation();
