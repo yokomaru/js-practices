@@ -9,30 +9,26 @@ function init() {
   let year = today.getFullYear();
   let month = today.getMonth() + 1;
 
-  if (typeof argv["y"] === "boolean")
+  if (typeof argv.y === "boolean")
     return console.error("cal: option requires an argument -- y");
 
-  if (typeof argv["m"] === "boolean")
+  if (typeof argv.m === "boolean")
     return console.error("cal: option requires an argument -- m");
 
-  if (typeof argv["y"] !== "undefined") {
-    if (
-      typeof argv["y"] === "number" &&
-      1970 <= argv["y"] &&
-      argv["y"] <= 2100
-    ) {
-      year = argv["y"];
+  if (typeof argv.y !== "undefined") {
+    if (typeof argv.y === "number" && 1970 <= argv.y && argv.y <= 2100) {
+      year = argv.y;
     } else {
-      return console.error(`cal: year \`${argv["y"]}' not in range 1970..2100`);
+      return console.error(`cal: year \`${argv.y}' not in range 1970..2100`);
     }
   }
 
-  if (typeof argv["m"] !== "undefined") {
-    if (typeof argv["m"] === "number" && 1 <= argv["m"] && argv["m"] <= 12) {
-      month = argv["m"];
+  if (typeof argv.m !== "undefined") {
+    if (typeof argv.m === "number" && 1 <= argv.m && argv.m <= 12) {
+      month = argv.m;
     } else {
       return console.error(
-        `cal: ${argv["m"]} is neither a month number (1..12) nor a name`,
+        `cal: ${argv.m} is neither a month number (1..12) nor a name`,
       );
     }
   }
