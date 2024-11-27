@@ -64,10 +64,11 @@ function buildCalender(year, month, today) {
     date < new Date(year, month, 1, 0);
     date.setDate(date.getDate() + 1)
   ) {
+    const calenderDate = date.getDate().toString();
     const displayDate =
       today.toDateString() === date.toDateString()
-        ? chalk.bgWhite(`${date.getDate()}`.padStart(2, " "))
-        : `${date.getDate()}`.padStart(2, " ");
+        ? chalk.bgWhite(calenderDate.padStart(2, " "))
+        : calenderDate.padStart(2, " ");
 
     if (date.getDay() === 6) {
       console.log(displayDate);
