@@ -54,8 +54,9 @@ function buildCalender(year, month, today) {
   console.log("日 月 火 水 木 金 土");
 
   const monthFirstDate = new Date(year, month - 1, 1);
+  const monthFirstDay = monthFirstDate.getDay();
 
-  for (let i = 0; i < monthFirstDate.getDay(); i++) {
+  for (let i = 0; i < monthFirstDay; i++) {
     process.stdout.write("   ");
   }
 
