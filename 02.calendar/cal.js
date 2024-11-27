@@ -53,14 +53,14 @@ function buildCalender(year, month, today) {
 
   console.log("日 月 火 水 木 金 土");
 
-  const firstMonthDate = new Date(year, month - 1, 1);
+  const monthFirstDate = new Date(year, month - 1, 1);
 
-  for (let i = 0; i < new Date(firstMonthDate).getDay(); i++) {
+  for (let i = 0; i < monthFirstDate.getDay(); i++) {
     process.stdout.write("   ");
   }
 
   for (
-    let date = firstMonthDate;
+    let date = monthFirstDate;
     date < new Date(year, month, 1, 0);
     date.setDate(date.getDate() + 1)
   ) {
