@@ -60,9 +60,11 @@ function buildCalender(year, month, today) {
     process.stdout.write("   ");
   }
 
+  const monthLastDate = new Date(year, month, 0);
+
   for (
     let date = monthFirstDate;
-    date < new Date(year, month, 1, 0);
+    date <= monthLastDate;
     date.setDate(date.getDate() + 1)
   ) {
     const calenderDate = date.getDate().toString();
