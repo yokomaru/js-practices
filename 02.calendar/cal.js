@@ -9,11 +9,13 @@ function init() {
   let year = today.getFullYear();
   let month = today.getMonth() + 1;
 
-  if (typeof argv.y === "boolean")
+  if (typeof argv.y === "boolean") {
     return console.error("cal: option requires an argument -- y");
+  }
 
-  if (typeof argv.m === "boolean")
+  if (typeof argv.m === "boolean") {
     return console.error("cal: option requires an argument -- m");
+  }
 
   if (typeof argv.y !== "undefined") {
     if (typeof argv.y === "number" && 1970 <= argv.y && argv.y <= 2100) {
