@@ -3,39 +3,53 @@
 import minimist from "minimist";
 import chalk from "chalk";
 
-function init() {
-  const argv = minimist(process.argv.slice(2));
-  const today = new Date();
-  let year = today.getFullYear();
-  let month = today.getMonth() + 1;
+function parseArguments(argv) {
+  validateMonth(argv.m);
+  validateYear(argv.y);
 
-  if (typeof argv.y === "boolean") {
-    return console.error("cal: option requires an argument -- y");
+  return [argv.m, argv.y];
+}
+
+function validateMonth(argvMonth) {
+  if (typeof argvMonth === "undefined") {
+    return;
   }
 
-  if (typeof argv.m === "boolean") {
-    return console.error("cal: option requires an argument -- m");
+  if (typeof argvMonth === "boolean") {
+    console.error("cal: option requires an argument -- m");
+    process.exit(1);
   }
 
-  if (typeof argv.y !== "undefined") {
-    if (typeof argv.y === "number" && 1970 <= argv.y && argv.y <= 2100) {
-      year = argv.y;
-    } else {
-      return console.error(`cal: year \`${argv.y}' not in range 1970..2100`);
-    }
+  if (typeof argvMonth !== "number" || argvMonth < 1 || 12 < argvMonth) {
+    console.error(`cal: month \`${argvMonth}' not in range 1..12`);
+    process.exit(1);
+  }
+}
+
+function validateYear(argvYear) {
+  if (typeof argvYear === "undefined") {
+    return;
   }
 
-  if (typeof argv.m !== "undefined") {
-    if (typeof argv.m === "number" && 1 <= argv.m && argv.m <= 12) {
-      month = argv.m;
-    } else {
-      return console.error(
-        `cal: ${argv.m} is neither a month number (1..12) nor a name`,
-      );
-    }
+  if (typeof argvYear === "boolean") {
+    console.error("cal: option requires an argument -- y");
+    process.exit(1);
   }
 
-  buildCalender(year, month, today);
+  if (typeof argvYear !== "number" || argvYear < 1970 || 2100 < argvYear) {
+    console.error(`cal: year \`${argvYear}' not in range 1970..2100`);
+    process.exit(1);
+  }
+}
+
+function setMonth(currentDate, argvMonth) {
+  return typeof argvMonth === "undefined"
+    ? currentDate.getMonth() + 1
+    : argvMonth;
+}
+
+function setYear(currentDate, argvYear) {
+  return typeof argvYear === "undefined" ? currentDate.getFullYear() : argvYear;
 }
 
 function buildCalender(year, month, today) {
@@ -84,4 +98,10 @@ function buildCalender(year, month, today) {
   console.log();
 }
 
-init();
+const argv = minimist(process.argv.slice(2));
+const [argvMonth, argvYear] = parseArguments(argv);
+const currentDate = new Date();
+const month = setMonth(currentDate, argvMonth);
+const year = setYear(currentDate, argvYear);
+
+buildCalender(year, month, currentDate);
