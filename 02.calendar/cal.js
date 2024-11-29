@@ -52,7 +52,7 @@ function setYear(currentDate, argvYear) {
   return typeof argvYear === "undefined" ? currentDate.getFullYear() : argvYear;
 }
 
-function buildCalender(year, month, today) {
+function printCalender(year, month, today) {
   const calenderTitle = `${month}月 ${year}`;
   const calenderTitleLength = calenderTitle.length;
 
@@ -104,4 +104,4 @@ const currentDate = new Date();
 const month = setMonth(currentDate, argvMonth);
 const year = setYear(currentDate, argvYear);
 
-buildCalender(year, month, currentDate);
+printCalender(year, month, currentDate);
