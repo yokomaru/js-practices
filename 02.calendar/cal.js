@@ -27,9 +27,9 @@ function validateMonth(argvMonth) {
 }
 
 function validateYear(argvYear) {
-  if (typeof argvYear === "undefined") {
-    return;
-  }
+    if (typeof argvYear === "undefined") {
+      return;
+    }
 
   if (typeof argvYear === "boolean") {
     console.error("cal: option requires an argument -- y");
@@ -67,35 +67,30 @@ function printCalender(year, month, today) {
 
   console.log("日 月 火 水 木 金 土");
 
-  const monthFirstDate = new Date(year, month - 1, 1);
-  const monthFirstDay = monthFirstDate.getDay();
+  const monthFirstDay = new Date(year, month - 1, 1).getDay();
 
   for (let i = 0; i < monthFirstDay; i++) {
     process.stdout.write("   ");
   }
 
-  const monthLastDate = new Date(year, month, 0);
+  const monthLastDate = new Date(year, month, 0).getDate();
 
-  for (
-    let date = monthFirstDate;
-    date <= monthLastDate;
-    date.setDate(date.getDate() + 1)
-  ) {
-    const calenderDate = date.getDate().toString();
+  for (let date = 1; date <= monthLastDate; date++) {
+    const calenderDate = new Date(year, month - 1, date);
+
     const displayDate =
-      today.toDateString() === date.toDateString()
-        ? chalk.bgWhite(calenderDate.padStart(2, " "))
-        : calenderDate.padStart(2, " ");
+      today.toDateString() === calenderDate.toDateString()
+        ? chalk.bgWhite(`${date}`.padStart(2, " "))
+        : `${date}`.padStart(2, " ");
 
-    if (date.getDay() === 6) {
+    if (calenderDate.getDay() === 6) {
       console.log(displayDate);
-    } else {
-      process.stdout.write(displayDate);
-      process.stdout.write(" ");
+      continue;
     }
-  }
 
-  console.log();
+    process.stdout.write(displayDate);
+    process.stdout.write(date === monthLastDate ? "\n" : " ");
+  }
 }
 
 const argv = minimist(process.argv.slice(2));
