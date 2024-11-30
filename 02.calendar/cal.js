@@ -42,14 +42,14 @@ function validateYear(argvYear) {
   }
 }
 
-function setMonth(currentDate, argvMonth) {
+function setMonth(today, argvMonth) {
   return typeof argvMonth === "undefined"
-    ? currentDate.getMonth() + 1
+    ? today.getMonth() + 1
     : argvMonth;
 }
 
-function setYear(currentDate, argvYear) {
-  return typeof argvYear === "undefined" ? currentDate.getFullYear() : argvYear;
+function setYear(today, argvYear) {
+  return typeof argvYear === "undefined" ? today.getFullYear() : argvYear;
 }
 
 function printCalender(year, month, today) {
@@ -95,8 +95,8 @@ function printCalender(year, month, today) {
 
 const argv = minimist(process.argv.slice(2));
 const [argvMonth, argvYear] = parseArguments(argv);
-const currentDate = new Date();
-const month = setMonth(currentDate, argvMonth);
-const year = setYear(currentDate, argvYear);
+const today = new Date();
+const month = setMonth(today, argvMonth);
+const year = setYear(today, argvYear);
 
-printCalender(year, month, currentDate);
+printCalender(year, month, today);
