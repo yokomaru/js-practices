@@ -3,18 +3,15 @@
 import minimist from "minimist";
 import chalk from "chalk";
 
-function parseArguments(argv) {
-  validateMonth(argv.m);
-  validateYear(argv.y);
+function setMonth(today, argvMonth) {
+  return typeof argvMonth === "undefined" ? today.getMonth() + 1 : argvMonth;
+}
 
-  return [argv.m, argv.y];
+function setYear(today, argvYear) {
+  return typeof argvYear === "undefined" ? today.getFullYear() : argvYear;
 }
 
 function validateMonth(argvMonth) {
-  if (typeof argvMonth === "undefined") {
-    return;
-  }
-
   if (typeof argvMonth === "boolean") {
     console.error("cal: option requires an argument -- m");
     process.exit(1);
@@ -27,10 +24,6 @@ function validateMonth(argvMonth) {
 }
 
 function validateYear(argvYear) {
-    if (typeof argvYear === "undefined") {
-      return;
-    }
-
   if (typeof argvYear === "boolean") {
     console.error("cal: option requires an argument -- y");
     process.exit(1);
@@ -40,16 +33,6 @@ function validateYear(argvYear) {
     console.error(`cal: year \`${argvYear}' not in range 1970..2100`);
     process.exit(1);
   }
-}
-
-function setMonth(today, argvMonth) {
-  return typeof argvMonth === "undefined"
-    ? today.getMonth() + 1
-    : argvMonth;
-}
-
-function setYear(today, argvYear) {
-  return typeof argvYear === "undefined" ? today.getFullYear() : argvYear;
 }
 
 function printCalender(year, month, today) {
@@ -94,9 +77,9 @@ function printCalender(year, month, today) {
 }
 
 const argv = minimist(process.argv.slice(2));
-const [argvMonth, argvYear] = parseArguments(argv);
 const today = new Date();
-const month = setMonth(today, argvMonth);
-const year = setYear(today, argvYear);
-
+const month = setMonth(today, argv.m);
+const year = setYear(today, argv.y);
+validateMonth(month);
+validateYear(year);
 printCalender(year, month, today);
