@@ -36,18 +36,7 @@ function validateYear(argvYear) {
 }
 
 function printCalender(year, month, today) {
-  const calenderTitle = `${month}月 ${year}`;
-  const calenderTitleLength = calenderTitle.length;
-
-  console.log(
-    `${calenderTitle
-      .padStart(
-        calenderTitleLength + Math.floor((20 - calenderTitleLength) / 2),
-        " ",
-      )
-      .padEnd(20, " ")}`,
-  );
-
+  console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
   const monthFirstDay = new Date(year, month - 1, 1).getDay();
