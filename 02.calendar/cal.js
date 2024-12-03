@@ -49,11 +49,11 @@ function printCalender(year, month, today) {
 
   for (let date = 1; date <= monthLastDate; date++) {
     const calenderDate = new Date(year, month - 1, date);
-
+    const paddedDate = date.toString().padStart(2, " ");
     const displayDate =
       today.toDateString() === calenderDate.toDateString()
-        ? chalk.bgWhite(`${date}`.padStart(2, " "))
-        : `${date}`.padStart(2, " ");
+        ? chalk.bgWhite(paddedDate)
+        : paddedDate;
 
     if (calenderDate.getDay() === 6) {
       console.log(displayDate);
