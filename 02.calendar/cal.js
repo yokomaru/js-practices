@@ -43,11 +43,8 @@ function printCalender(year, month, today) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
-  const monthFirstDay = new Date(year, month - 1, 1);
-
-  for (let i = 0; i < monthFirstDay.getDay(); i++) {
-    process.stdout.write("   ");
-  }
+  const monthFirstDate = new Date(year, month - 1, 1);
+  process.stdout.write("   ".repeat(monthFirstDate.getDay()));
 
   const monthLastDate = new Date(year, month, 0);
 
