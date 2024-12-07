@@ -3,7 +3,7 @@
 import minimist from "minimist";
 import chalk from "chalk";
 
-function validateMonth(argvMonth) {
+const validateMonth = (argvMonth) => {
   if (typeof argvMonth === "undefined") {
     return true;
   }
@@ -19,9 +19,9 @@ function validateMonth(argvMonth) {
   }
 
   return true;
-}
+};
 
-function validateYear(argvYear) {
+const validateYear = (argvYear) => {
   if (typeof argvYear === "undefined") {
     return true;
   }
@@ -37,9 +37,9 @@ function validateYear(argvYear) {
   }
 
   return true;
-}
+};
 
-function printCalender(year, month, today) {
+const printCalender = (year, month, today) => {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
@@ -49,7 +49,7 @@ function printCalender(year, month, today) {
   const monthLastDate = new Date(year, month, 0);
 
   for (
-    let date = new Date(year, month - 1, 1);
+    let date = new Date(monthFirstDate);
     date <= monthLastDate;
     date.setDate(date.getDate() + 1)
   ) {
@@ -63,7 +63,7 @@ function printCalender(year, month, today) {
       `${displayDate}${date.getDay() === 6 || date.toDateString() === monthLastDate.toDateString() ? "\n" : " "}`,
     );
   }
-}
+};
 
 const argv = minimist(process.argv.slice(2));
 
