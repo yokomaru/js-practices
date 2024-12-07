@@ -62,13 +62,9 @@ function printCalender(year, month, today) {
         ? chalk.bgWhite(paddedDate)
         : paddedDate;
 
-    if (date.getDay() === 6) {
-      console.log(displayDate);
-      continue;
-    }
-
-    process.stdout.write(displayDate);
-    process.stdout.write(date === monthLastDate ? "\n" : " ");
+    process.stdout.write(
+      `${displayDate}${date.getDay() === 6 || date.toDateString() === monthLastDate.toDateString() ? "\n" : " "}`,
+    );
   }
 }
 
