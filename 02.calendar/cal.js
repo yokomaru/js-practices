@@ -39,9 +39,9 @@ function printCalender(year, month, today) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
-  const monthFirstDay = new Date(year, month - 1, 1).getDay();
+  const monthFirstDay = new Date(year, month - 1, 1);
 
-  for (let i = 0; i < monthFirstDay; i++) {
+  for (let i = 0; i < monthFirstDay.getDay(); i++) {
     process.stdout.write("   ");
   }
 
