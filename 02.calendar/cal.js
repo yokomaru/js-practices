@@ -4,11 +4,11 @@ import minimist from "minimist";
 import chalk from "chalk";
 
 function setMonth(today, argvMonth) {
-  return typeof argvMonth === "undefined" ? today.getMonth() + 1 : argvMonth;
+  return argvMonth ?? today.getMonth() + 1;
 }
 
 function setYear(today, argvYear) {
-  return typeof argvYear === "undefined" ? today.getFullYear() : argvYear;
+  return argvYear ?? today.getFullYear();
 }
 
 function validateMonth(argvMonth) {
