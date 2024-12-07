@@ -3,14 +3,6 @@
 import minimist from "minimist";
 import chalk from "chalk";
 
-function setMonth(today, argvMonth) {
-  return argvMonth ?? today.getMonth() + 1;
-}
-
-function setYear(today, argvYear) {
-  return argvYear ?? today.getFullYear();
-}
-
 function validateMonth(argvMonth) {
   if (typeof argvMonth === "boolean") {
     console.error("cal: option requires an argument -- m");
@@ -67,8 +59,9 @@ function printCalender(year, month, today) {
 
 const argv = minimist(process.argv.slice(2));
 const today = new Date();
-const month = setMonth(today, argv.m);
-const year = setYear(today, argv.y);
+const month = argv.m ?? today.getMonth() + 1;
+const year = argv.m ?? today.getFullYear();
+
 validateMonth(month);
 validateYear(year);
 printCalender(year, month, today);
