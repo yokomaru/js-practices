@@ -49,17 +49,20 @@ function printCalender(year, month, today) {
     process.stdout.write("   ");
   }
 
-  const monthLastDate = new Date(year, month, 0).getDate();
+  const monthLastDate = new Date(year, month, 0);
 
-  for (let date = 1; date <= monthLastDate; date++) {
-    const calenderDate = new Date(year, month - 1, date);
-    const paddedDate = date.toString().padStart(2, " ");
+  for (
+    let date = new Date(year, month - 1, 1);
+    date <= monthLastDate;
+    date.setDate(date.getDate() + 1)
+  ) {
+    const paddedDate = date.getDate().toString().padStart(2, " ");
     const displayDate =
-      today.toDateString() === calenderDate.toDateString()
+      today.toDateString() === date.toDateString()
         ? chalk.bgWhite(paddedDate)
         : paddedDate;
 
-    if (calenderDate.getDay() === 6) {
+    if (date.getDay() === 6) {
       console.log(displayDate);
       continue;
     }
