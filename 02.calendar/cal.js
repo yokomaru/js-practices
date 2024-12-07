@@ -22,7 +22,7 @@ function validateMonth(argvMonth) {
 }
 
 function validateYear(argvYear) {
-  if (typeof argvMonth === "undefined") {
+  if (typeof argvYear === "undefined") {
     return true;
   }
 
@@ -73,5 +73,5 @@ if (!validateMonth(argv.m) || !validateYear(argv.y)) {
 }
 
 const month = argv.m ?? today.getMonth() + 1;
-const year = argv.m ?? today.getFullYear();
+const year = argv.y ?? today.getFullYear();
 printCalender(year, month, today);
