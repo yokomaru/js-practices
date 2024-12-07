@@ -60,9 +60,15 @@ const printCalender = (year, month, today) => {
         : paddedDate;
 
     process.stdout.write(
-      `${displayDate}${date.getDay() === 6 || date.toDateString() === monthLastDate.toDateString() ? "\n" : " "}`,
+      `${displayDate}${isSaturdayOrMonthLastDate(date, monthLastDate) ? "\n" : " "}`,
     );
   }
+};
+
+const isSaturdayOrMonthLastDate = (date, monthLastDate) => {
+  return (
+    date.getDay() === 6 || date.toDateString() === monthLastDate.toDateString()
+  );
 };
 
 const argv = minimist(process.argv.slice(2));
