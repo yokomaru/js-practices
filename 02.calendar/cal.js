@@ -66,12 +66,12 @@ function printCalender(year, month, today) {
 }
 
 const argv = minimist(process.argv.slice(2));
-const today = new Date();
 
 if (!validateMonth(argv.m) || !validateYear(argv.y)) {
   process.exit(1);
 }
 
+const today = new Date();
 const month = argv.m ?? today.getMonth() + 1;
 const year = argv.y ?? today.getFullYear();
 printCalender(year, month, today);
