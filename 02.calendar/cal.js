@@ -4,27 +4,39 @@ import minimist from "minimist";
 import chalk from "chalk";
 
 function validateMonth(argvMonth) {
+  if (typeof argvMonth === "undefined") {
+    return true;
+  }
+
   if (typeof argvMonth === "boolean") {
     console.error("cal: option requires an argument -- m");
-    process.exit(1);
+    return false;
   }
 
   if (typeof argvMonth !== "number" || argvMonth < 1 || 12 < argvMonth) {
     console.error(`cal: month \`${argvMonth}' not in range 1..12`);
-    process.exit(1);
+    return false;
   }
+
+  return true;
 }
 
 function validateYear(argvYear) {
+  if (typeof argvMonth === "undefined") {
+    return true;
+  }
+
   if (typeof argvYear === "boolean") {
     console.error("cal: option requires an argument -- y");
-    process.exit(1);
+    return false;
   }
 
   if (typeof argvYear !== "number" || argvYear < 1970 || 2100 < argvYear) {
     console.error(`cal: year \`${argvYear}' not in range 1970..2100`);
-    process.exit(1);
+    return false;
   }
+
+  return true;
 }
 
 function printCalender(year, month, today) {
@@ -59,9 +71,11 @@ function printCalender(year, month, today) {
 
 const argv = minimist(process.argv.slice(2));
 const today = new Date();
+
+if (!validateMonth(argv.m) || !validateYear(argv.y)) {
+  process.exit(1);
+}
+
 const month = argv.m ?? today.getMonth() + 1;
 const year = argv.m ?? today.getFullYear();
-
-validateMonth(month);
-validateYear(year);
 printCalender(year, month, today);
