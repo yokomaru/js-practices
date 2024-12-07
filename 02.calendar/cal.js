@@ -55,7 +55,7 @@ function printCalender(year, month, today) {
   ) {
     const paddedDate = date.getDate().toString().padStart(2, " ");
     const displayDate =
-      today.toDateString() === date.toDateString()
+      date.toDateString() === today.toDateString()
         ? chalk.bgWhite(paddedDate)
         : paddedDate;
 
