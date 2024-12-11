@@ -32,19 +32,19 @@ const executeErrorDBOperations = () => {
     {
       db.run(insertQuery, insertParam, () => {
         db.run(insertQuery, insertParam, (error) => {
-          console.error(error);
-          db.all(
-            errorSelectQuery,
-            (result) => {
-              console.log(`${result.id}: ${result.title}`);
-            },
-            (error) => {
+          if (error) {
+            console.error(error);
+          }
+          db.get(errorSelectQuery, (error, result) => {
+            if (error) {
               console.error(error);
-              db.run(dropQuery, () => {
-                db.close();
-              });
-            },
-          );
+            } else {
+              console.log(`${result.id}: ${result.title}`);
+            }
+            db.run(dropQuery, () => {
+              db.close();
+            });
+          });
         });
       });
     }
