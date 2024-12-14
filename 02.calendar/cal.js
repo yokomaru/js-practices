@@ -59,16 +59,13 @@ const printCalender = (year, month, today) => {
         ? chalk.bgWhite(paddedDay)
         : paddedDay;
 
+    const isEndOfWeek = date.getDay() === 6;
+    const isEndOfMonth = date.toDateString() === monthLastDate.toDateString();
+
     process.stdout.write(
-      `${displayedDay}${isSaturdayOrMonthLastDate(date, monthLastDate) ? "\n" : " "}`,
+      `${displayedDay}${isEndOfWeek || isEndOfMonth ? "\n" : " "}`,
     );
   }
-};
-
-const isSaturdayOrMonthLastDate = (date, monthLastDate) => {
-  return (
-    date.getDay() === 6 || date.toDateString() === monthLastDate.toDateString()
-  );
 };
 
 const argv = minimist(process.argv.slice(2));
