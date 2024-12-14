@@ -53,14 +53,14 @@ const printCalender = (year, month, today) => {
     date <= monthLastDate;
     date.setDate(date.getDate() + 1)
   ) {
-    const paddedDate = date.getDate().toString().padStart(2, " ");
-    const displayDate =
+    const paddedDay = date.getDate().toString().padStart(2, " ");
+    const displayedDay =
       date.toDateString() === today.toDateString()
-        ? chalk.bgWhite(paddedDate)
-        : paddedDate;
+        ? chalk.bgWhite(paddedDay)
+        : paddedDay;
 
     process.stdout.write(
-      `${displayDate}${isSaturdayOrMonthLastDate(date, monthLastDate) ? "\n" : " "}`,
+      `${displayedDay}${isSaturdayOrMonthLastDate(date, monthLastDate) ? "\n" : " "}`,
     );
   }
 };
