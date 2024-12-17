@@ -42,54 +42,54 @@ function closeDB(db) {
 function executeSuccessDBOperations() {
   const db = new sqlite3.Database(":memory:");
 
-  runDB(db, createQuery).then(() => {
-    runDB(db, insertQuery, insertParam)
-      .then((result) => {
-        console.log(`this.lastID: ${result.lastID}`);
-      })
-      .then(() => {
-        getDB(db, selectQuery)
-          .then((result) => {
-            console.log(`${result.id}: ${result.title}`);
-          })
-          .then(() => {
-            runDB(db, dropQuery).then(() => {
-              closeDB(db);
-            });
-          });
-      });
-  });
+  runDB(db, createQuery)
+    .then(() => {
+      return runDB(db, insertQuery, insertParam);
+    })
+    .then((result) => {
+      console.log(`this.lastID: ${result.lastID}`);
+      return getDB(db, selectQuery);
+    })
+    .then((result) => {
+      console.log(`${result.id}: ${result.title}`);
+      return runDB(db, dropQuery);
+    })
+    .then(() => {
+      return closeDB(db);
+    });
 }
 
 function executeErrorDBOperations() {
   const db = new sqlite3.Database(":memory:");
 
-  runDB(db, createQuery).then(() => {
-    runDB(db, insertQuery, insertParam)
-      .then(
-        runDB(db, insertQuery, insertParam)
-          .then((result) => {
-            console.log(`this.lastID: ${result.lastID}`);
-          })
-          .catch((error) => {
-            console.log(error);
-          }),
-      )
-      .then(() => {
-        getDB(db, errorSelectQuery)
-          .then((result) => {
-            console.log(`${result.id}: ${result.title}`);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-          .then(() => {
-            runDB(db, dropQuery).then(() => {
-              closeDB(db);
-            });
-          });
-      });
-  });
+  runDB(db, createQuery)
+    .then(() => {
+      return runDB(db, insertQuery, insertParam);
+    })
+    .then(() => {
+      return runDB(db, insertQuery, insertParam);
+    })
+    .then((result) => {
+      console.log(`this.lastID: ${result.lastID}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      return getDB(db, errorSelectQuery);
+    })
+    .then((result) => {
+      console.log(`${result.id}: ${result.title}`);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    .then(() => {
+      return runDB(db, dropQuery);
+    })
+    .then(() => {
+      return closeDB(db);
+    });
 }
 
 console.log("Success");
