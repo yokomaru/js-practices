@@ -2,7 +2,7 @@ import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
 const createQuery =
-  "CREATE TABLE books (id INTEGER PRIMARY KEY, title TEXT UNIQUE)";
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
 const insertQuery = "INSERT INTO books (title) values ($1)";
 const selectQuery = "SELECT id, title FROM books";
 const errorSelectQuery = "SELECT id, titl FROM books";
