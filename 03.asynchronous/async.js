@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 
