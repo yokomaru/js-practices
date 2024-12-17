@@ -33,11 +33,17 @@ const getDB = (db, query) => {
   });
 };
 
-const closeDB = (db) => {
-  return new Promise(() => {
-    db.close();
+function closeDB(db) {
+  return new Promise((resolve, reject) => {
+    db.close((error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
   });
-};
+}
 
 const executeSuccessDBOperations = async () => {
   const db = new sqlite3.Database(":memory:");

@@ -34,8 +34,14 @@ function getDB(db, query) {
 }
 
 function closeDB(db) {
-  return new Promise(() => {
-    db.close();
+  return new Promise((resolve, reject) => {
+    db.close((error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
   });
 }
 
