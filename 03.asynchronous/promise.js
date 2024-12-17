@@ -45,7 +45,7 @@ function closeDB(db) {
   });
 }
 
-function executeSuccessDBOperations() {
+function executeDBOperationWithSuccess() {
   const db = new sqlite3.Database(":memory:");
 
   runDB(db, createQuery)
@@ -65,7 +65,7 @@ function executeSuccessDBOperations() {
     });
 }
 
-function executeErrorDBOperations() {
+function executeDBOperationWithError() {
   const db = new sqlite3.Database(":memory:");
 
   runDB(db, createQuery)
@@ -99,8 +99,8 @@ function executeErrorDBOperations() {
 }
 
 console.log("Success");
-executeSuccessDBOperations();
+executeDBOperationWithSuccess();
 await timers.setTimeout(100);
 console.log("-------------------------------------");
 console.log("Error");
-executeErrorDBOperations();
+executeDBOperationWithError();

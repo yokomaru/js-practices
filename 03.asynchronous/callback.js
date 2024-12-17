@@ -9,7 +9,7 @@ const errorSelectQuery = "SELECT id, titl FROM books";
 const dropQuery = "DROP TABLE books";
 const insertParam = { $1: "Title1" };
 
-const executeSuccessDBOperations = () => {
+const executeDBOperationWithSuccess = () => {
   const db = new sqlite3.Database(":memory:");
   db.run(createQuery, () => {
     {
@@ -26,7 +26,7 @@ const executeSuccessDBOperations = () => {
   });
 };
 
-const executeErrorDBOperations = () => {
+const executeDBOperationWithError = () => {
   const db = new sqlite3.Database(":memory:");
   db.run(createQuery, () => {
     {
@@ -52,8 +52,8 @@ const executeErrorDBOperations = () => {
 };
 
 console.log("Success");
-executeSuccessDBOperations();
+executeDBOperationWithSuccess();
 await timers.setTimeout(100);
 console.log("-------------------------------------");
 console.log("Error");
-executeErrorDBOperations();
+executeDBOperationWithError();

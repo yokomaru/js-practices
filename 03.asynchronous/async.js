@@ -45,7 +45,7 @@ function closeDB(db) {
   });
 }
 
-const executeSuccessDBOperations = async () => {
+const executeDBOperationWithSuccess = async () => {
   const db = new sqlite3.Database(":memory:");
 
   await runDB(db, createQuery);
@@ -57,7 +57,7 @@ const executeSuccessDBOperations = async () => {
   await closeDB(db);
 };
 
-const executeErrorDBOperations = async () => {
+const executeDBOperationWithError = async () => {
   const db = new sqlite3.Database(":memory:");
 
   await runDB(db, createQuery);
@@ -81,8 +81,8 @@ const executeErrorDBOperations = async () => {
 };
 
 console.log("Success");
-executeSuccessDBOperations();
+executeDBOperationWithSuccess();
 await timers.setTimeout(100);
 console.log("-------------------------------------");
 console.log("Error");
-executeErrorDBOperations();
+executeDBOperationWithError();
