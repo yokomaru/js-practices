@@ -81,7 +81,7 @@ function executeErrorDBOperation() {
       console.log(`this.lastID: ${result.lastID}`);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error.message);
     })
     .then(() => {
       return getDB(db, errorSelectQuery);
@@ -90,7 +90,7 @@ function executeErrorDBOperation() {
       console.log(`${result.id}: ${result.title}`);
     })
     .catch((error) => {
-      console.log(error);
+      console.error(error.message);
     })
     .then(() => {
       return runDB(db, dropQuery);
