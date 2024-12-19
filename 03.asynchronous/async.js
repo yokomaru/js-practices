@@ -65,17 +65,19 @@ const executeErrorDBOperation = async () => {
   await runDB(db, createQuery);
   await runDB(db, insertQuery, insertParam);
   try {
-    await runDB(db, insertQuery, insertParam);
+    const insertedRow = await runDB(db, insertQuery, insertParam);
+    console.log(`this.lastID: ${insertedRow.lastID}`);
   } catch (error) {
     if (error.code == "SQLITE_CONSTRAINT") {
-      console.log(error);
+      console.error(error.message);
     }
   }
   try {
-    await getDB(db, errorSelectQuery);
+    const selectedRow = await getDB(db, errorSelectQuery);
+    console.log(`${selectedRow.id}: ${selectedRow.title}`);
   } catch (error) {
     if (error.code == "SQLITE_ERROR") {
-      console.log(error);
+      console.error(error.message);
     }
   }
   await runDB(db, dropQuery);
