@@ -51,10 +51,10 @@ const executeDBOperationWithSuccess = async () => {
   const db = new sqlite3.Database(":memory:");
 
   await runDB(db, createQuery);
-  const insertedStatement = await runDB(db, insertQuery, insertParam);
-  console.log(`this.lastID: ${insertedStatement.lastID}`);
-  const selectedStatement = await getDB(db, selectQuery);
-  console.log(`${selectedStatement.id}: ${selectedStatement.title}`);
+  const insertedRow = await runDB(db, insertQuery, insertParam);
+  console.log(`this.lastID: ${insertedRow.lastID}`);
+  const selectedRow = await getDB(db, selectQuery);
+  console.log(`${selectedRow.id}: ${selectedRow.title}`);
   await runDB(db, dropQuery);
   await closeDB(db);
 };
