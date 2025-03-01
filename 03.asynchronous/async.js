@@ -14,16 +14,14 @@ const executeSuccessDBOperation = async () => {
   const db = new sqlite3.Database(":memory:");
 
   await runDB(db, createQuery);
-  const insertedRow = await runDB(db, insertQuery, insertParam);
+  const insertResult = await runDB(db, insertQuery, insertParam);
   // 指摘2
   // Promise のプログラムと結果を受ける変数の名前が異なっています。
   // また、runDB の実行結果として受け取れるのは row ではないので名前も適当ではなさそうです。
+  console.log(`this.lastID: ${insertResult.lastID}`);
 
-
-  console.log(`this.lastID: ${insertedRow.lastID}`);
-
-  const selectedRow = await getDB(db, selectQuery);
-  console.log(`${selectedRow.id}: ${selectedRow.title}`);
+  const selectResult = await getDB(db, selectQuery);
+  console.log(`${selectResult.id}: ${selectResult.title}`);
   await runDB(db, dropQuery);
   await closeDB(db);
 };
@@ -35,8 +33,8 @@ const executeErrorDBOperation = async () => {
   await runDB(db, createQuery);
   await runDB(db, insertQuery, insertParam);
   try {
-    const insertedRow = await runDB(db, insertQuery, insertParam);
-    console.log(`this.lastID: ${insertedRow.lastID}`);
+    const insertResult = await runDB(db, insertQuery, insertParam);
+    console.log(`this.lastID: ${insertResult.lastID}`);
   } catch (error) {
     // 指摘3
     // error にプロパティアクセスできないような値が格納されていると error.code の部分でエラーが起きてしまいます。
@@ -47,8 +45,8 @@ const executeErrorDBOperation = async () => {
     }
   }
   try {
-    const selectedRow = await getDB(db, errorSelectQuery);
-    console.log(`${selectedRow.id}: ${selectedRow.title}`);
+    const selectResult = await getDB(db, errorSelectQuery);
+    console.log(`${selectResult.id}: ${selectResult.title}`);
   } catch (error) {
     if (error.code == "SQLITE_ERROR") {
       console.error(error.message);

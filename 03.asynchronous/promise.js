@@ -12,23 +12,16 @@ function executeSuccessDBOperation() {
   const db = new sqlite3.Database(":memory:");
 
   runDB(db, createQuery)
-    .then(() => {
-      return runDB(db, insertQuery, insertParam);
-    })
-    // 指摘8
-    // アロー関数の中身が return しかないときは簡潔文体を使ってください。
-
-    .then((result) => {
-      console.log(`this.lastID: ${result.lastID}`);
+    .then(() => {return runDB(db, insertQuery, insertParam);})
+    .then((insertResult) => {
+      console.log(`this.lastID: ${insertResult.lastID}`);
       return getDB(db, selectQuery);
     })
-    .then((result) => {
-      console.log(`${result.id}: ${result.title}`);
+    .then((selectResult) => {
+      console.log(`${selectResult.id}: ${selectResult.title}`);
       return runDB(db, dropQuery);
     })
-    .then(() => {
-      return closeDB(db);
-    });
+    .then(() => {closeDB(db);});
 }
 
 function executeErrorDBOperation() {
@@ -41,8 +34,8 @@ function executeErrorDBOperation() {
     .then(() => {
       return runDB(db, insertQuery, insertParam);
     })
-    .then((result) => {
-      console.log(`this.lastID: ${result.lastID}`);
+    .then((insertResult) => {
+      console.log(`Statement.lastID: ${insertResult.lastID}`);
       // 指摘9
       // this.lastID と出力されていますがそうではなさそうです。
     })
@@ -52,8 +45,8 @@ function executeErrorDBOperation() {
     .then(() => {
       return getDB(db, errorSelectQuery);
     })
-    .then((result) => {
-      console.log(`${result.id}: ${result.title}`);
+    .then((selectResult) => {
+      console.log(`${selectResult.id}: ${selectResult.title}`);
     })
     .catch((error) => {
       console.error(error.message);
