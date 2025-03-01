@@ -3,42 +3,7 @@
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
-
-const runDB = (db, query, param) => {
-  return new Promise((resolve, reject) => {
-    db.run(query, param, function (error) {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(this);
-      }
-    });
-  });
-};
-
-const getDB = (db, query) => {
-  return new Promise((resolve, reject) => {
-    db.get(query, (error, row) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(row);
-      }
-    });
-  });
-};
-
-function closeDB(db) {
-  return new Promise((resolve, reject) => {
-    db.close((error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve();
-      }
-    });
-  });
-}
+import {runDB, getDB, closeDB} from  "./db_operation.js";
 
 // 指摘１
 // 他のファイルと定義が重複しています。課題の注意点にもコピーしないように書かれていますよ。https://bootcamp.fjord.jp/pages/511#%E6%B3%A8%E6%84%8F%E7%82%B9-3
