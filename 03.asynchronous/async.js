@@ -36,20 +36,20 @@ const executeErrorDBOperation = async () => {
     const insertResult = await runStatement(db, insertQuery, insertParam);
     console.log(`this.lastID: ${insertResult.lastID}`);
   } catch (error) {
-    // 指摘3
-    // error にプロパティアクセスできないような値が格納されていると error.code の部分でエラーが起きてしまいます。
-    if (error.code == "SQLITE_CONSTRAINT") {
+    if (error instanceof Error && error?.code == "SQLITE_CONSTRAINT") {
       console.error(error.message);
-    // 指摘4
-    // 例外が握り潰されています。例外を握り潰してはいけません。例外処理を行っている意味がなくなってしまいます。捕捉したい例外のみを捕捉するようにしてください。
-    }
+    } else {
+    throw error;
+  }
   }
   try {
     const selectResult = await getFirstRow(db, errorSelectQuery);
     console.log(`${selectResult.id}: ${selectResult.title}`);
   } catch (error) {
-    if (error.code == "SQLITE_ERROR") {
-      console.error(error.message);
+    if (error instanceof Error && error?.code == "SQLITE_ERROR") {
+        console.error(error.message);
+      } else {
+      throw error;
     }
   }
   await runStatement(db, dropQuery);
