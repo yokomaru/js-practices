@@ -10,8 +10,12 @@ const selectQuery = "SELECT id, title FROM books";
 const errorSelectQuery = "SELECT id, titl FROM books";
 const dropQuery = "DROP TABLE books";
 const insertParam = { $1: "Title1" };
+// 指摘6
+// 他のファイルと定義が重複しています。
 
 function runDB(db, query, param) {
+// 指摘7
+// runDB という名前だと database を run するかのように見えてしまいます。closeDB はそれで意味的にあっていますが、runDB や getDB はあっていなさそうです。
   return new Promise((resolve, reject) => {
     db.run(query, param, function (error) {
       if (error) {
@@ -54,6 +58,9 @@ function executeSuccessDBOperation() {
     .then(() => {
       return runDB(db, insertQuery, insertParam);
     })
+    // 指摘8
+    // アロー関数の中身が return しかないときは簡潔文体を使ってください。
+
     .then((result) => {
       console.log(`this.lastID: ${result.lastID}`);
       return getDB(db, selectQuery);
@@ -79,6 +86,8 @@ function executeErrorDBOperation() {
     })
     .then((result) => {
       console.log(`this.lastID: ${result.lastID}`);
+      // 指摘9
+      // this.lastID と出力されていますがそうではなさそうです。
     })
     .catch((error) => {
       console.error(error.message);
