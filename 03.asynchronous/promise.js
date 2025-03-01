@@ -2,16 +2,7 @@
 
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
-
-const createQuery =
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
-const insertQuery = "INSERT INTO books (title) values ($1)";
-const selectQuery = "SELECT id, title FROM books";
-const errorSelectQuery = "SELECT id, titl FROM books";
-const dropQuery = "DROP TABLE books";
-const insertParam = { $1: "Title1" };
-// 指摘6
-// 他のファイルと定義が重複しています。
+import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
 
 function runDB(db, query, param) {
 // 指摘7
