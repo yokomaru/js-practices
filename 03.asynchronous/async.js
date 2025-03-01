@@ -3,7 +3,7 @@
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
-import {runDB, getDB, closeDB} from  "./db_operation.js";
+import {runStatement, getFirstRow, closeDB} from  "./db_operation.js";
 
 // 指摘１
 // 他のファイルと定義が重複しています。課題の注意点にもコピーしないように書かれていますよ。https://bootcamp.fjord.jp/pages/511#%E6%B3%A8%E6%84%8F%E7%82%B9-3
@@ -13,16 +13,16 @@ import {runDB, getDB, closeDB} from  "./db_operation.js";
 const executeSuccessDBOperation = async () => {
   const db = new sqlite3.Database(":memory:");
 
-  await runDB(db, createQuery);
-  const insertResult = await runDB(db, insertQuery, insertParam);
+  await runStatement(db, createQuery);
+  const insertResult = await runStatement(db, insertQuery, insertParam);
   // 指摘2
   // Promise のプログラムと結果を受ける変数の名前が異なっています。
   // また、runDB の実行結果として受け取れるのは row ではないので名前も適当ではなさそうです。
   console.log(`this.lastID: ${insertResult.lastID}`);
 
-  const selectResult = await getDB(db, selectQuery);
+  const selectResult = await getFirstRow(db, selectQuery);
   console.log(`${selectResult.id}: ${selectResult.title}`);
-  await runDB(db, dropQuery);
+  await runStatement(db, dropQuery);
   await closeDB(db);
 };
 
@@ -30,10 +30,10 @@ const executeSuccessDBOperation = async () => {
 const executeErrorDBOperation = async () => {
   const db = new sqlite3.Database(":memory:");
 
-  await runDB(db, createQuery);
-  await runDB(db, insertQuery, insertParam);
+  await runStatement(db, createQuery);
+  await runStatement(db, insertQuery, insertParam);
   try {
-    const insertResult = await runDB(db, insertQuery, insertParam);
+    const insertResult = await runStatement(db, insertQuery, insertParam);
     console.log(`this.lastID: ${insertResult.lastID}`);
   } catch (error) {
     // 指摘3
@@ -45,14 +45,14 @@ const executeErrorDBOperation = async () => {
     }
   }
   try {
-    const selectResult = await getDB(db, errorSelectQuery);
+    const selectResult = await getFirstRow(db, errorSelectQuery);
     console.log(`${selectResult.id}: ${selectResult.title}`);
   } catch (error) {
     if (error.code == "SQLITE_ERROR") {
       console.error(error.message);
     }
   }
-  await runDB(db, dropQuery);
+  await runStatement(db, dropQuery);
   await closeDB(db);
 };
 

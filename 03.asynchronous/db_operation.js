@@ -1,4 +1,4 @@
-export const runDB = (db, query, param) => {
+export const runStatement = (db, query, param) => {
   return new Promise((resolve, reject) => {
     db.run(query, param, function (error) {
       if (error) {
@@ -10,7 +10,7 @@ export const runDB = (db, query, param) => {
   });
 };
 
-export const getDB = (db, query) => {
+export const getFirstRow = (db, query) => {
   return new Promise((resolve, reject) => {
     db.get(query, (error, row) => {
       if (error) {
