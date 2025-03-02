@@ -2,11 +2,15 @@
 
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
-import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
-import {runStatement, getFirstRow, closeDB} from  "./db_operation.js";
-
-// 指摘7
-// runDB という名前だと database を run するかのように見えてしまいます。closeDB はそれで意味的にあっていますが、runStatement や getFirstRow はあっていなさそうです。
+import {
+  createQuery,
+  insertQuery,
+  selectQuery,
+  errorSelectQuery,
+  dropQuery,
+  insertParam,
+} from "./query.js";
+import { runStatement, getFirstRow, closeDB } from "./db_operation.js";
 
 function executeSuccessDBOperation() {
   const db = new sqlite3.Database(":memory:");
@@ -30,10 +34,8 @@ function executeErrorDBOperation() {
   runStatement(db, createQuery)
     .then(() => runStatement(db, insertQuery, insertParam))
     .then(() => runStatement(db, insertQuery, insertParam))
-    .then(
-      (insertResult) => console.log(`Statement.lastID: ${insertResult.lastID}`)
-      // 指摘9
-      // this.lastID と出力されていますがそうではなさそうです。
+    .then((insertResult) =>
+      console.log(`Statement.lastID: ${insertResult.lastID}`),
     )
     .catch((error) => console.error(error.message))
     .then(() => getFirstRow(db, errorSelectQuery))

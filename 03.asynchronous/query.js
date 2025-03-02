@@ -1,4 +1,5 @@
-export const createQuery = "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
+export const createQuery =
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE)";
 export const insertQuery = "INSERT INTO books (title) values ($1)";
 export const selectQuery = "SELECT id, title FROM books";
 export const errorSelectQuery = "SELECT id, titl FROM books";

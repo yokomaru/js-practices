@@ -2,7 +2,14 @@
 
 import timers from "timers/promises";
 import sqlite3 from "sqlite3";
-import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
+import {
+  createQuery,
+  insertQuery,
+  selectQuery,
+  errorSelectQuery,
+  dropQuery,
+  insertParam,
+} from "./query.js";
 
 const executeSuccessDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
