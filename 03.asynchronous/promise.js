@@ -12,7 +12,7 @@ function executeSuccessDBOperation() {
   const db = new sqlite3.Database(":memory:");
 
   runStatement(db, createQuery)
-    .then(() => {return runStatement(db, insertQuery, insertParam);})
+    .then(() => runStatement(db, insertQuery, insertParam))
     .then((insertResult) => {
       console.log(`this.lastID: ${insertResult.lastID}`);
       return getFirstRow(db, selectQuery);
@@ -21,42 +21,28 @@ function executeSuccessDBOperation() {
       console.log(`${selectResult.id}: ${selectResult.title}`);
       return runStatement(db, dropQuery);
     })
-    .then(() => {closeDB(db);});
+    .then(() => closeDB(db));
 }
 
 function executeErrorDBOperation() {
   const db = new sqlite3.Database(":memory:");
 
   runStatement(db, createQuery)
-    .then(() => {
-      return runStatement(db, insertQuery, insertParam);
-    })
-    .then(() => {
-      return runStatement(db, insertQuery, insertParam);
-    })
-    .then((insertResult) => {
-      console.log(`Statement.lastID: ${insertResult.lastID}`);
+    .then(() => runStatement(db, insertQuery, insertParam))
+    .then(() => runStatement(db, insertQuery, insertParam))
+    .then(
+      (insertResult) => console.log(`Statement.lastID: ${insertResult.lastID}`)
       // 指摘9
       // this.lastID と出力されていますがそうではなさそうです。
-    })
-    .catch((error) => {
-      console.error(error.message);
-    })
-    .then(() => {
-      return getFirstRow(db, errorSelectQuery);
-    })
-    .then((selectResult) => {
-      console.log(`${selectResult.id}: ${selectResult.title}`);
-    })
-    .catch((error) => {
-      console.error(error.message);
-    })
-    .then(() => {
-      return runStatement(db, dropQuery);
-    })
-    .then(() => {
-      return closeDB(db);
-    });
+    )
+    .catch((error) => console.error(error.message))
+    .then(() => getFirstRow(db, errorSelectQuery))
+    .then((selectResult) =>
+      console.log(`${selectResult.id}: ${selectResult.title}`),
+    )
+    .catch((error) => console.error(error.message))
+    .then(() => runStatement(db, dropQuery))
+    .then(() => closeDB(db));
 }
 
 console.log("Success");
