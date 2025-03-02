@@ -9,7 +9,7 @@ const executeSuccessDBOperation = () => {
   db.run(createQuery, () => {
     {
       db.run(insertQuery, insertParam, function () {
-        console.log(`this.lastID: ${this.lastID}`);
+        console.log(`Statement.lastID: ${this.lastID}`);
         db.get(selectQuery, (error, result) => {
           console.log(`${result.id}: ${result.title}`);
           db.run(dropQuery, () => {
