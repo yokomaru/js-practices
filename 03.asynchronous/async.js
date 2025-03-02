@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import timers from "timers/promises";
 import sqlite3 from "sqlite3";
 import {createQuery, insertQuery, selectQuery, errorSelectQuery, dropQuery, insertParam} from  "./query.js";
 import {runStatement, getFirstRow, closeDB} from  "./db_operation.js";
