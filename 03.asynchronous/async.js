@@ -57,10 +57,9 @@ const executeErrorDBOperation = async () => {
 };
 
 console.log("Success");
-executeSuccessDBOperation();
-await timers.setTimeout(100);
+await executeSuccessDBOperation();
 // 指摘5
 // async/await のプログラムでは setTimeout の呼び出しは必要ないはずです。なぜかを考えて理由をコメントしてください。
 console.log("-------------------------------------");
 console.log("Error");
-executeErrorDBOperation();
+await executeErrorDBOperation();
