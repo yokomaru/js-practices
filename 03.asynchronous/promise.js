@@ -12,7 +12,7 @@ import {
 } from "./query.js";
 import { runQuery, getFirstRow, closeDB } from "./db_operation.js";
 
-function executeSuccessDBOperation() {
+const executeSuccessDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
 
   runQuery(db, createQuery)
@@ -26,9 +26,9 @@ function executeSuccessDBOperation() {
       return runQuery(db, dropQuery);
     })
     .then(() => closeDB(db));
-}
+};
 
-function executeErrorDBOperation() {
+const executeErrorDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
 
   runQuery(db, createQuery)
@@ -41,7 +41,7 @@ function executeErrorDBOperation() {
     .catch((error) => console.error(error.message))
     .then(() => runQuery(db, dropQuery))
     .then(() => closeDB(db));
-}
+};
 
 console.log("Success");
 executeSuccessDBOperation();
