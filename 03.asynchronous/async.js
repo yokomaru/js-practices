@@ -16,8 +16,8 @@ const executeSuccessDBOperation = async () => {
   await runQuery(db, createQuery);
   const insertedResult = await runQuery(db, insertQuery, insertParam);
   console.log(`this.lastID: ${insertedResult.lastID}`);
-  const selectResult = await getFirstRow(db, selectQuery);
-  console.log(`${selectResult.id}: ${selectResult.title}`);
+  const firstRow = await getFirstRow(db, selectQuery);
+  console.log(`${firstRow.id}: ${firstRow.title}`);
   await runQuery(db, dropQuery);
   await closeDB(db);
 };
@@ -37,8 +37,8 @@ const executeErrorDBOperation = async () => {
     }
   }
   try {
-    const selectResult = await getFirstRow(db, errorSelectQuery);
-    console.log(`${selectResult.id}: ${selectResult.title}`);
+    const firstRow = await getFirstRow(db, errorSelectQuery);
+    console.log(`${firstRow.id}: ${firstRow.title}`);
   } catch (error) {
     if (error instanceof Error && error?.code == "SQLITE_ERROR") {
       console.error(error.message);
