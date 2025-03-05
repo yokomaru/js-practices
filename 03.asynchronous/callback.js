@@ -16,7 +16,7 @@ const executeSuccessDBOperation = () => {
   db.run(createQuery, () => {
     {
       db.run(insertQuery, insertParam, function () {
-        console.log(`Statement.lastID: ${this.lastID}`);
+        console.log(`lastID: ${this.lastID}`);
         db.get(selectQuery, (error, result) => {
           console.log(`${result.id}: ${result.title}`);
           db.run(dropQuery, () => {
@@ -37,7 +37,7 @@ const executeErrorDBOperation = () => {
           if (error) {
             console.error(error.message);
           } else {
-            console.log(`this.lastID: ${result.lastID}`);
+            console.log(`lastID: ${result.lastID}`);
           }
           db.get(errorSelectQuery, (error, result) => {
             if (error) {

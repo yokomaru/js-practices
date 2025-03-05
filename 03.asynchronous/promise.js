@@ -18,7 +18,7 @@ function executeSuccessDBOperation() {
   runQuery(db, createQuery)
     .then(() => runQuery(db, insertQuery, insertParam))
     .then((insertedResult) => {
-      console.log(`this.lastID: ${insertedResult.lastID}`);
+      console.log(`lastID: ${insertedResult.lastID}`);
       return getFirstRow(db, selectQuery);
     })
     .then((firstRow) => {
@@ -37,9 +37,7 @@ function executeErrorDBOperation() {
     .then((insertedResult) => console.log(`lastID: ${insertedResult.lastID}`))
     .catch((error) => console.error(error.message))
     .then(() => getFirstRow(db, errorSelectQuery))
-    .then((firstRow) =>
-      console.log(`${firstRow.id}: ${firstRow.title}`),
-    )
+    .then((firstRow) => console.log(`${firstRow.id}: ${firstRow.title}`))
     .catch((error) => console.error(error.message))
     .then(() => runQuery(db, dropQuery))
     .then(() => closeDB(db));
