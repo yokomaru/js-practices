@@ -14,8 +14,8 @@ import { runQuery, getFirstRow, closeDB } from "./db_operation.js";
 const executeSuccessDBOperation = async () => {
   const db = new sqlite3.Database(":memory:");
   await runQuery(db, createQuery);
-  const insertResult = await runQuery(db, insertQuery, insertParam);
-  console.log(`this.lastID: ${insertResult.lastID}`);
+  const insertedResult = await runQuery(db, insertQuery, insertParam);
+  console.log(`this.lastID: ${insertedResult.lastID}`);
   const selectResult = await getFirstRow(db, selectQuery);
   console.log(`${selectResult.id}: ${selectResult.title}`);
   await runQuery(db, dropQuery);
@@ -27,8 +27,8 @@ const executeErrorDBOperation = async () => {
   await runQuery(db, createQuery);
   await runQuery(db, insertQuery, insertParam);
   try {
-    const insertResult = await runQuery(db, insertQuery, insertParam);
-    console.log(`this.lastID: ${insertResult.lastID}`);
+    const insertedResult = await runQuery(db, insertQuery, insertParam);
+    console.log(`this.lastID: ${insertedResult.lastID}`);
   } catch (error) {
     if (error instanceof Error && error?.code == "SQLITE_CONSTRAINT") {
       console.error(error.message);
