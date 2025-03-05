@@ -1,4 +1,4 @@
-export const runStatement = (db, query, param) => {
+export const runQuery = (db, query, param) => {
   return new Promise((resolve, reject) => {
     db.run(query, param, function (error) {
       if (error) {

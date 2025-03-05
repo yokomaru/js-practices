@@ -10,20 +10,20 @@ import {
   dropQuery,
   insertParam,
 } from "./query.js";
-import { runStatement, getFirstRow, closeDB } from "./db_operation.js";
+import { runQuery, getFirstRow, closeDB } from "./db_operation.js";
 
 function executeSuccessDBOperation() {
   const db = new sqlite3.Database(":memory:");
 
-  runStatement(db, createQuery)
-    .then(() => runStatement(db, insertQuery, insertParam))
+  runQuery(db, createQuery)
+    .then(() => runQuery(db, insertQuery, insertParam))
     .then((insertResult) => {
       console.log(`this.lastID: ${insertResult.lastID}`);
       return getFirstRow(db, selectQuery);
     })
     .then((selectResult) => {
       console.log(`${selectResult.id}: ${selectResult.title}`);
-      return runStatement(db, dropQuery);
+      return runQuery(db, dropQuery);
     })
     .then(() => closeDB(db));
 }
@@ -31,9 +31,9 @@ function executeSuccessDBOperation() {
 function executeErrorDBOperation() {
   const db = new sqlite3.Database(":memory:");
 
-  runStatement(db, createQuery)
-    .then(() => runStatement(db, insertQuery, insertParam))
-    .then(() => runStatement(db, insertQuery, insertParam))
+  runQuery(db, createQuery)
+    .then(() => runQuery(db, insertQuery, insertParam))
+    .then(() => runQuery(db, insertQuery, insertParam))
     .then((insertResult) =>
       console.log(`Statement.lastID: ${insertResult.lastID}`),
     )
@@ -43,7 +43,7 @@ function executeErrorDBOperation() {
       console.log(`${selectResult.id}: ${selectResult.title}`),
     )
     .catch((error) => console.error(error.message))
-    .then(() => runStatement(db, dropQuery))
+    .then(() => runQuery(db, dropQuery))
     .then(() => closeDB(db));
 }
 
