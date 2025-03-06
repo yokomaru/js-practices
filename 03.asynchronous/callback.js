@@ -19,9 +19,7 @@ const executeSuccessDBOperation = () => {
         console.log(`lastID: ${this.lastID}`);
         db.get(selectQuery, (error, result) => {
           console.log(`${result.id}: ${result.title}`);
-          db.run(dropQuery, () => {
-            db.close();
-          });
+          db.run(dropQuery, () => db.close());
         });
       });
     }
@@ -45,9 +43,7 @@ const executeErrorDBOperation = () => {
             } else {
               console.log(`${result.id}: ${result.title}`);
             }
-            db.run(dropQuery, () => {
-              db.close();
-            });
+            db.run(dropQuery, () => db.close());
           });
         });
       });
