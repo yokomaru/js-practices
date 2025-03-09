@@ -8,7 +8,9 @@ export const runQuery = (db, query, param) => {
 
 export const getFirstRow = (db, query, param) => {
   return new Promise((resolve, reject) => {
-    db.get(query, param, (error, row) => (error ? reject(error) : resolve(row)));
+    db.get(query, param, (error, row) =>
+      error ? reject(error) : resolve(row),
+    );
   });
 };
 

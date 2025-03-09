@@ -25,22 +25,38 @@ const executeSuccessDBOperation = () => {
       console.log(`${row.id}: ${row.title}`);
       return runQuery(db, dropQuery);
     })
-    .then(() => closeDB(db));
+    .then(() => {
+      closeDB(db);
+    });
 };
 
 const executeErrorDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
 
   runQuery(db, createQuery)
+    .then(() => {
+      runQuery(db, insertQuery, insertParam);
+    })
     .then(() => runQuery(db, insertQuery, insertParam))
-    .then(() => runQuery(db, insertQuery, insertParam))
-    .then((insertedResult) => console.log(`lastID: ${insertedResult.lastID}`))
-    .catch((error) => console.error(error.message))
+    .then((insertedResult) => {
+      console.log(`lastID: ${insertedResult.lastID}`);
+    })
+    .catch((error) => {
+      console.error(error.message);
+    })
     .then(() => getFirstRow(db, errorSelectQuery))
-    .then((row) => console.log(`${row.id}: ${row.title}`))
-    .catch((error) => console.error(error.message))
-    .then(() => runQuery(db, dropQuery))
-    .then(() => closeDB(db));
+    .then((row) => {
+      console.log(`${row.id}: ${row.title}`);
+    })
+    .catch((error) => {
+      console.error(error.message);
+    })
+    .then(() => {
+      runQuery(db, dropQuery);
+    })
+    .then(() => {
+      closeDB(db);
+    });
 };
 
 console.log("Success");
