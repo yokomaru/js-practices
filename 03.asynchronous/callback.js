@@ -17,8 +17,8 @@ const executeSuccessDBOperation = () => {
     {
       db.run(insertQuery, insertParam, function () {
         console.log(`lastID: ${this.lastID}`);
-        db.get(selectQuery, (error, result) => {
-          console.log(`${result.id}: ${result.title}`);
+        db.get(selectQuery, (error, row) => {
+          console.log(`${row.id}: ${row.title}`);
           db.run(dropQuery, () => db.close());
         });
       });
@@ -35,10 +35,10 @@ const executeErrorDBOperation = () => {
           error
             ? console.error(error.message)
             : console.log(`lastID: ${result.lastID}`);
-          db.get(errorSelectQuery, (error, result) => {
+          db.get(errorSelectQuery, (error, row) => {
             error
               ? console.error(error.message)
-              : console.log(`${result.id}: ${result.title}`);
+              : console.log(`${row.id}: ${row.title}`);
             db.run(dropQuery, () => db.close());
           });
         });
