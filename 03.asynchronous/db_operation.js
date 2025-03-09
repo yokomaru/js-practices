@@ -1,21 +1,35 @@
 export const runQuery = (db, query, param) => {
   return new Promise((resolve, reject) => {
     db.run(query, param, function (error) {
-      error ? reject(error) : resolve(this);
+      if (error) {
+        reject(error);
+      } else {
+        resolve(this);
+      }
     });
   });
 };
 
 export const getFirstRow = (db, query, param) => {
   return new Promise((resolve, reject) => {
-    db.get(query, param, (error, row) =>
-      error ? reject(error) : resolve(row),
-    );
+    db.get(query, param, (error, row) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(row);
+      }
+    });
   });
 };
 
 export const closeDB = (db) => {
   return new Promise((resolve, reject) => {
-    db.close((error) => (error ? reject(error) : resolve()));
+    db.close((error) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve();
+      }
+    });
   });
 };

@@ -34,13 +34,17 @@ const executeErrorDBOperation = () => {
     {
       db.run(insertQuery, insertParam, () => {
         db.run(insertQuery, insertParam, (error, result) => {
-          error
-            ? console.error(error.message)
-            : console.log(`lastID: ${result.lastID}`);
+          if (error) {
+            console.error(error.message);
+          } else {
+            console.log(`lastID: ${result.lastID}`);
+          }
           db.get(errorSelectQuery, (error, row) => {
-            error
-              ? console.error(error.message)
-              : console.log(`${row.id}: ${row.title}`);
+            if (error) {
+              console.error(error.message);
+            } else {
+              console.log(`${row.id}: ${row.title}`);
+            }
             db.run(dropQuery, () => {
               db.close();
             });
