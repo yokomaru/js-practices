@@ -30,9 +30,7 @@ const executeSuccessDBOperation = () => {
 const executeErrorDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
   runQuery(db, createQuery)
-    .then(() => {
-      runQuery(db, insertQuery, insertParam);
-    })
+    .then(() => runQuery(db, insertQuery, insertParam))
     .then(() => runQuery(db, insertQuery, insertParam))
     .then((result) => {
       console.log(`lastID: ${result.lastID}`);
@@ -47,9 +45,7 @@ const executeErrorDBOperation = () => {
     .catch((error) => {
       console.error(error.message);
     })
-    .then(() => {
-      runQuery(db, dropQuery);
-    })
+    .then(() => runQuery(db, dropQuery))
     .then(() => closeDB(db));
 };
 
