@@ -33,11 +33,11 @@ const executeErrorDBOperation = () => {
   db.run(createQuery, () => {
     {
       db.run(insertQuery, insertParam, () => {
-        db.run(insertQuery, insertParam, (error, result) => {
+        db.run(insertQuery, insertParam, function (error) {
           if (error) {
             console.error(error.message);
           } else {
-            console.log(`lastID: ${result.lastID}`);
+            console.log(`lastID: ${this.lastID}`);
           }
           db.get(errorSelectQuery, (error, row) => {
             if (error) {
