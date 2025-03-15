@@ -14,7 +14,6 @@ import { runQuery, getFirstRow, closeDB } from "./db_operation.js";
 
 const executeSuccessDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
-
   runQuery(db, createQuery)
     .then(() => runQuery(db, insertQuery, insertParam))
     .then((result) => {
@@ -30,7 +29,6 @@ const executeSuccessDBOperation = () => {
 
 const executeErrorDBOperation = () => {
   const db = new sqlite3.Database(":memory:");
-
   runQuery(db, createQuery)
     .then(() => {
       runQuery(db, insertQuery, insertParam);
