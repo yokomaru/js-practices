@@ -25,9 +25,7 @@ const executeSuccessDBOperation = () => {
       console.log(`${row.id}: ${row.title}`);
       return runQuery(db, dropQuery);
     })
-    .then(() => {
-      closeDB(db);
-    });
+    .then(() => closeDB(db));
 };
 
 const executeErrorDBOperation = () => {
@@ -54,9 +52,7 @@ const executeErrorDBOperation = () => {
     .then(() => {
       runQuery(db, dropQuery);
     })
-    .then(() => {
-      closeDB(db);
-    });
+    .then(() => closeDB(db));
 };
 
 console.log("Success");
