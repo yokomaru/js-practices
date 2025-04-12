@@ -6,7 +6,7 @@ class Memo {
   }
 
   #generateDisplayName = () => {
-    const slicedName = this.content?.slice(0, this.content?.indexOf("\n"));
+    const slicedName = this.content?.split("\n")[0];
     return !slicedName ? "No Title" : slicedName;
   };
 }
