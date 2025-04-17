@@ -17,13 +17,13 @@ class SelectPrompt {
     };
   };
 
-  runQuestionForRead = async (memos) => {
+  runQuestionForDelete = async (memos) => {
     const question = this.#generateQuestion(memos);
     const answer = Enquirer.prompt(question);
     return answer;
   };
 
-  runQuestionForDelete = async (memos) => {
+  runQuestionForRead = async (memos) => {
     const question = this.#generateQuestion(memos);
     const answer = Enquirer.prompt(question);
     return answer;

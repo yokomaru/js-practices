@@ -59,14 +59,11 @@ class Command {
     }
   };
 
-  readMemo = async () => {
+  displayMemoList = async () => {
     let memos;
     try {
       memos = await this.memoControl.index();
-      const answer = await new SelectPrompt(
-        "Choose a note you want to see:",
-      ).runQuestionForRead(memos);
-      console.log(answer.favorite.content);
+      memos.map((obj) => console.log(obj.name));
     } catch (error) {
       if (error instanceof Error && error.message === "No Data") {
         console.log(error.message);
@@ -85,11 +82,14 @@ class Command {
     }
   };
 
-  displayMemoList = async () => {
+  readMemo = async () => {
     let memos;
     try {
       memos = await this.memoControl.index();
-      memos.map((obj) => console.log(obj.name));
+      const answer = await new SelectPrompt(
+        "Choose a note you want to see:",
+      ).runQuestionForRead(memos);
+      console.log(answer.favorite.content);
     } catch (error) {
       if (error instanceof Error && error.message === "No Data") {
         console.log(error.message);

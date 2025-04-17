@@ -3,18 +3,6 @@ class DatabaseOperation {
     this.db = db;
   }
 
-  selectAll = (query) => {
-    return new Promise((resolve, reject) => {
-      this.db.all(query, (error, rows) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(rows);
-        }
-      });
-    });
-  };
-
   close = () => {
     return new Promise((resolve, reject) => {
       this.db.close((error) => {
@@ -22,6 +10,18 @@ class DatabaseOperation {
           reject(error);
         } else {
           resolve();
+        }
+      });
+    });
+  };
+
+  createTable = (query) => {
+    return new Promise((resolve, reject) => {
+      this.db.run(query, function (error) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(this);
         }
       });
     });
@@ -51,13 +51,13 @@ class DatabaseOperation {
     });
   };
 
-  createTable = (query) => {
+  selectAll = (query) => {
     return new Promise((resolve, reject) => {
-      this.db.run(query, function (error) {
+      this.db.all(query, (error, rows) => {
         if (error) {
           reject(error);
         } else {
-          resolve(this);
+          resolve(rows);
         }
       });
     });

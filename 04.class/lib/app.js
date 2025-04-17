@@ -5,11 +5,6 @@ class App {
       process.exit(1);
     }
 
-    if (option.isTTY && option.isRead) {
-      await command.readMemo();
-      process.exit(1);
-    }
-
     if (option.isTTY && option.isDelete) {
       await command.deleteMemo();
       process.exit(1);
@@ -17,6 +12,11 @@ class App {
 
     if (option.isTTY && option.isList) {
       await command.displayMemoList();
+      process.exit(1);
+    }
+
+    if (option.isTTY && option.isRead) {
+      await command.readMemo();
       process.exit(1);
     }
 

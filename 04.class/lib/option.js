@@ -1,8 +1,8 @@
 class Option {
   constructor(argv, isTTY) {
+    this.isDelete = !!argv.d;
     this.isList = !!argv.l;
     this.isRead = !!argv.r;
-    this.isDelete = !!argv.d;
     this.isTTY = !!isTTY;
   }
 
