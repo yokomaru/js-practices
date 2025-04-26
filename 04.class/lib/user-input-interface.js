@@ -1,6 +1,7 @@
 class UserInputInterface {
+  #readlineInterface;
   constructor(readline) {
-    this.readlineInterface = readline.createInterface({
+    this.#readlineInterface = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
@@ -8,7 +9,7 @@ class UserInputInterface {
 
   run = (lines) => {
     return new Promise((resolve) => {
-      this.readlineInterface
+      this.#readlineInterface
         .on("line", (line) => {
           lines.push(line);
         })

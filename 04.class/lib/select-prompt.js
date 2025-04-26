@@ -1,15 +1,16 @@
 import Enquirer from "enquirer";
 
 class SelectPrompt {
+  #message;
   constructor(message) {
-    this.message = message;
+    this.#message = message;
   }
 
   #generateQuestion = (memos) => {
     return {
       type: "select",
       name: "favorite",
-      message: this.message,
+      message: this.#message,
       choices: memos,
       result() {
         return this.focused;
