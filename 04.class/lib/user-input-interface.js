@@ -7,14 +7,23 @@ class UserInputInterface {
     });
   }
 
-  run = (lines) => {
-    return new Promise((resolve) => {
+  run = () => {
+    const lines = [];
+    return new Promise((resolve, reject) => {
       this.#readlineInterface
         .on("line", (line) => {
-          lines.push(line);
+          if ((lines.length != 0 && !line) || line) {
+            //linesにすでに入力があるかつ空文字 か 文字が入力されていればメモが作成できる
+            lines.push(line);
+          }
         })
         .on("close", () => {
-          resolve(lines);
+          if (lines.length == 0) {
+            // メモの配列が空の場合
+            reject(new Error("Unable to create memo"));
+          } else {
+            resolve(lines);
+          }
         });
     });
   };

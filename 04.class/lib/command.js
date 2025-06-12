@@ -9,9 +9,19 @@ class Command {
   }
 
   createMemo = async () => {
-    let lines = [];
-    const inputLines = await new UserInputInterface(readline).run(lines);
-    const memo = inputLines.join("\n");
+    let memo;
+    try {
+      const inputLines = await new UserInputInterface(readline).run();
+      memo = inputLines.join("\n");
+    } catch (error) {
+      if (error instanceof Error && error.message === "Unable to create memo") {
+        console.log(error.message);
+        return;
+      } else {
+        throw error;
+      }
+    }
+
     try {
       await this.#memoControl.create(memo);
       console.log("A memo has been created.");
