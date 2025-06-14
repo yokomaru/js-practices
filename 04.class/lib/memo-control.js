@@ -18,7 +18,7 @@ class MemoControl {
   index = async () => {
     const query = "select id, content from memos";
     const rows = await this.databaseOperation.selectAll(query);
-    if (rows.length == 0) {
+    if (rows.length === 0) {
       throw new Error("No Data");
     }
     const memos = rows.map((value) => {
