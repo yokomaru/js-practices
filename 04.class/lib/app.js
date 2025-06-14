@@ -1,21 +1,21 @@
 class App {
-  static async main(option, command) {
-    if (option.hasNoOption()) {
+  static async main(command) {
+    if (command.userInput.hasNoOption()) {
       await command.createMemo();
       process.exit(1);
     }
 
-    if (option.isTTY && option.isDelete) {
+    if (command.userInput.isTTY && command.userInput.isDeleteOption) {
       await command.deleteMemo();
       process.exit(1);
     }
 
-    if (option.isTTY && option.isList) {
+    if (command.userInput.isTTY && command.userInput.isListOption) {
       await command.displayMemoList();
       process.exit(1);
     }
 
-    if (option.isTTY && option.isRead) {
+    if (command.userInput.isTTY && command.userInput.isReadOption) {
       await command.readMemo();
       process.exit(1);
     }

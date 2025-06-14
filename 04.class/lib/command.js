@@ -1,17 +1,15 @@
-import readline from "readline";
-import { SelectPrompt } from "./select-prompt.js";
-import { UserInputInterface } from "./user-input-interface.js";
-
 class Command {
+  userInput;
   #memoControl;
-  constructor(memoControl) {
+  constructor(memoControl, userInput) {
     this.#memoControl = memoControl;
+    this.userInput = userInput;
   }
 
   createMemo = async () => {
     let memo;
     try {
-      const inputLines = await new UserInputInterface(readline).run();
+      const inputLines = await this.userInput.runMemoInput();
       memo = inputLines.join("\n");
     } catch (error) {
       if (error instanceof Error && error.message === "Unable to create memo") {
@@ -47,9 +45,10 @@ class Command {
     let memos;
     try {
       memos = await this.#memoControl.index();
-      const answer = await new SelectPrompt(
+      const answer = await this.userInput.runQuestionForDelete(
+        memos,
         "Choose a memo you want to delete:",
-      ).runQuestionForDelete(memos);
+      );
       await this.#memoControl.delete(answer.favorite.id);
       console.log("Memo successfully deleted.");
     } catch (error) {
@@ -97,9 +96,10 @@ class Command {
     let memos;
     try {
       memos = await this.#memoControl.index();
-      const answer = await new SelectPrompt(
+      const answer = await this.userInput.runQuestionForRead(
+        memos,
         "Choose a note you want to see:",
-      ).runQuestionForRead(memos);
+      );
       console.log(answer.favorite.content);
     } catch (error) {
       if (error instanceof Error && error.message === "No Data") {
