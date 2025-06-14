@@ -18,13 +18,15 @@ class UserInput {
     return new Promise((resolve, reject) => {
       this.#readlineInterface
         .on("line", (line) => {
-          if ((lines.length != 0 && !line) || line) {
-            //linesの配列にすでに入力がある かつ 空文字 か、文字が入力されていればメモが作成できる
+          // 空白(スペース、タブ)を取り除く
+          const trimmed = line.trim();
+          // 最初の行は空文字だけではない行を登録できるようにする
+          if ((lines.length !== 0 && !trimmed) || trimmed) {
             lines.push(line);
           }
         })
         .on("close", () => {
-          if (lines.length == 0) {
+          if (lines.length === 0) {
             // メモの配列が空の場合
             reject(new Error("Unable to create memo"));
           } else {
